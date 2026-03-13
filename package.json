@@ -1,0 +1,33 @@
+{
+  "name": "electrothonbackend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/chetan208/Electrothon-Backend#readme",
+  "bugs": {
+    "url": "https://github.com/chetan208/Electrothon-Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chetan208/Electrothon-Backend.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@getbrevo/brevo": "^5.0.1",
+    "@google/genai": "^1.44.0",
+    "axios": "^1.13.6",
+    "brevo": "^1.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.0",
+    "nodemon": "^3.1.14"
+  }
+}
