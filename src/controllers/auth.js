@@ -98,7 +98,8 @@ const registerStudent = async (req, res) => {
 
 
 const verifyOTP = async (req, res) => {
-    const {email, otp} = req.body;
+    const {otp} = req.body;
+    const email = req.query.email;
 
     if (!email || !otp) {
         return res.status(400).json({
