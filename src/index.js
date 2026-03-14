@@ -3,6 +3,13 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import cookieParser from "cookie-parser";
+
+import collageRoutes from './routes/collages.js';
+import authRoutes from './routes/auth.js';
+import profileRoutes from './routes/profile.js';
+import aiRoutes from './routes/ai.js';
+
 
 // database connection
 mongoose.connect(process.env.MONGO_URI)
@@ -13,21 +20,25 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({extended: true }));
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-import collageRoutes from './routes/collages.js';
-import authRoutes from './routes/auth.js';
+
 
 app.use('/api/collages', collageRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/ai', aiRoutes);
 
 
 

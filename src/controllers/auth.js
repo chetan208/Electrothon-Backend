@@ -1,6 +1,8 @@
 import StudentModel from "../model/studentModel.js";
 import CollageModel from "../model/collageModel.js";
 import sendOTPEmail from "../services/sendEmail.js";
+import bcrypt from "bcryptjs";  
+import generateToken from "../services/generateToken.js";
 
 
 const registerStudent = async (req, res) => {
@@ -99,7 +101,13 @@ const registerStudent = async (req, res) => {
 
 const verifyOTP = async (req, res) => {
     const {otp} = req.body;
+<<<<<<< HEAD
     const email = req.query.email;
+=======
+    const {email} = req.params;
+
+    console.log('Verifying OTP for email:', email);
+>>>>>>> cdec2edcc466e2bda5715260c1a0f0a0679787f5
 
     if (!email || !otp) {
         return res.status(400).json({
@@ -133,6 +141,12 @@ const verifyOTP = async (req, res) => {
         student.otp = null;
         student.otpExpiry = null;
         await student.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'OTP verified successfully. Registration complete.',
+            student
+        });
         
     } catch (error) {
         return res.status(500).json({
@@ -142,5 +156,113 @@ const verifyOTP = async (req, res) => {
     }
 }
 
+const setPassword = async (req, res) => {
+    const { studentId, password } = req.body;
 
-export {registerStudent, verifyOTP};
+    if (!studentId || !password) {
+        return res.status(400).json({
+            success: false,
+            message: "Student ID and password are required"
+        });
+    }
+
+    try {
+        const student = await StudentModel.findById(studentId);
+
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: "Student not found"
+            });
+        }
+        if (!student.isVerified) {
+            return res.status(400).json({
+                success: false,
+                message: "Student is not verified"
+            });
+        }
+        const salt = await bcrypt.genSalt(10);
+        student.password = await bcrypt.hash(password, salt);
+        await student.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Password set successfully"
+        });
+        
+    } catch (error) {
+
+        console.log('Error setting password:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while setting the password"
+        });
+        
+    }
+
+
+}
+
+const login = async (req, res)=>{
+    const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and password are required"
+            });
+        }
+
+        try {
+            const student = await StudentModel.findOne({ email });
+            if (!student) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Student not found"
+                });
+            }
+            if (!student.isVerified) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Student is not verified"
+                });
+            }
+            const isMatch = await bcrypt.compare(password, student.password);
+            if (!isMatch) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid password"
+                });
+            }
+
+            const token = generateToken({
+                id: student._id,
+                email: student.email,
+                name: student.name
+            }) 
+            
+            res
+               .cookie('token', token, {
+                   httpOnly: true,
+                   secure: true,
+                   sameSite: "none",
+                })
+                .status(200)
+                .json({
+                    success: true,
+                    message: "Login successful",
+                    token
+                });
+        } catch (error) {
+            console.log('Error during login:', error);  
+            return res.status(500).json({
+                success: false,
+                message: "An error occurred during login"
+            });
+            
+        }
+
+}
+
+
+export {registerStudent, verifyOTP, setPassword, login};
