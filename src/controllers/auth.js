@@ -201,6 +201,7 @@ const setPassword = async (req, res) => {
 }
 
 const login = async (req, res)=>{
+
     const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).json({
@@ -260,7 +261,18 @@ const login = async (req, res)=>{
 
 }
 
+const logout = async (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+    }).status(200).json({
+        success: true,
+        message: "Logout successful"
+    });
+}
 
 
 
-export {registerStudent, verifyOTP, setPassword, login};
+
+export {registerStudent, verifyOTP, setPassword, login, logout};
