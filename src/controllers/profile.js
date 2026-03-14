@@ -119,7 +119,9 @@ const getStudentDetails = async (req, res) => {
     console.log("fetching details for email:", email);
 
     try {
-        const student = await StudentModel.findOne({ email }).select('-otp -otpExpiry -__v -password'); // Exclude sensitive fields like OTP, password, and version key 
+        const student = await StudentModel.findOne({ email })
+        .populate('collage', 'name state type')
+        .select('-otp -otpExpiry -__v -password'); // Exclude sensitive fields like OTP, password, and version key 
 
         if (!student) {
             return res.status(404).json({

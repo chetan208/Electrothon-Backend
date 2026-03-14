@@ -144,5 +144,24 @@ const getFeed = async (req, res) => {
   }
 };
 
+const fetchMyPosts = async (req, res) => {
+    const userId = req.student._id;
 
-export { addPost ,getFeed };
+    try {
+        const myPosts = await PostModel.find({ createdBy: userId }).sort({ createdAt: -1 });
+        res.status(200).json({
+            success: true,
+            posts: myPosts
+        });
+    } catch (error) {
+        console.error("Error fetching user's posts:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching user's posts"
+        });
+    }
+
+}
+
+
+export { addPost ,getFeed, fetchMyPosts };
