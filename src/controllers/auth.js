@@ -101,13 +101,9 @@ const registerStudent = async (req, res) => {
 
 const verifyOTP = async (req, res) => {
     const {otp} = req.body;
-<<<<<<< HEAD
-    const email = req.query.email;
-=======
     const {email} = req.params;
 
     console.log('Verifying OTP for email:', email);
->>>>>>> cdec2edcc466e2bda5715260c1a0f0a0679787f5
 
     if (!email || !otp) {
         return res.status(400).json({
@@ -263,6 +259,8 @@ const login = async (req, res)=>{
         }
 
 }
+
+
 
 
 export {registerStudent, verifyOTP, setPassword, login};
