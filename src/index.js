@@ -9,6 +9,7 @@ import collageRoutes from './routes/collages.js';
 import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
 import aiRoutes from './routes/ai.js';
+import postRoutes from './routes/post.js';
 
 
 // database connection
@@ -39,6 +40,8 @@ app.use('/api/collages', collageRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/post', postRoutes);
+
 
 
 
