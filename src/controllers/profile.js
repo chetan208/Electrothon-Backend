@@ -143,5 +143,6 @@ const getStudentDetails = async (req, res) => {
     }
 }
 
+
 export { completeStudentProfile, getStudentDetails };   
 

@@ -8,6 +8,6 @@ const router = Router();
 // api/profile/complete-profile/:email
 
 router.post("/complete-profile/:studentId",upload.single("avatar"), completeStudentProfile);
-router.get('/fetch-student', checkAuthMiddelware, getStudentDetails);
+router.get('/me', checkAuthMiddelware, getStudentDetails);
 
 export default router;
