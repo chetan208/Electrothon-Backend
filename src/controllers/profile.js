@@ -113,13 +113,17 @@ const completeStudentProfile = async (req, res) => {
 };
 
 const getStudentDetails = async (req, res) => {
-    const {email}= req.student
+    
+
+    const {id} = req.params;
+
+    console.log("fetching details for student id:", id);
 
 
-    console.log("fetching details for email:", email);
+ 
 
     try {
-        const student = await StudentModel.findOne({ email })
+        const student = await StudentModel.findById(id.toString())
         .populate('collage', 'name state type')
         .select('-otp -otpExpiry -__v -password'); // Exclude sensitive fields like OTP, password, and version key 
 

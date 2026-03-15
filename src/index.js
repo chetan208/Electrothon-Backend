@@ -14,6 +14,7 @@ import chatRoute from "./routes/chat.route.js";
 import recommendationRoute from "./routes/recommendation.route.js";
 import { startScheduler } from "./cron/scheduler.js";
 import notificationRoute from "./routes/notification.route.js";
+import searchRoute from "./routes/search.route.js";
 
 
 // database connection
@@ -48,6 +49,7 @@ app.use('/api/post', postRoutes);
 app.use("/api", chatRoute);
 app.use("/api/recommendations", recommendationRoute);
 app.use("/api", notificationRoute);
+app.use("/api", searchRoute);
 
 
 

@@ -79,17 +79,17 @@ College: ${student.collage?.name || "N/A"}
         });
 
         if (friends.length === 0 && others.length === 0) {
-          return { found: false, message: "No students found with these skills on the platform yet." };
+          return JSON.stringify({ found: false, message: "No students found with these skills on the platform yet." });
         }
 
-        return {
+        return JSON.stringify({
           found: true,
           friends: friends.map(s => fmt(s, true)),
           others:  others.map(s => fmt(s, false)),
-        };
+        });
       } catch (err) {
         console.error("[suggest_people] ERROR:", err.message);
-        return { found: false, message: "Could not fetch students." };
+        return JSON.stringify({ found: false, message: "Could not fetch students." });
       }
     },
   });
@@ -116,14 +116,14 @@ College: ${student.collage?.name || "N/A"}
           .limit(limit).lean();
 
         console.log("[search_students] found:", students.length);
-        return students.map(s => ({
+        return JSON.stringify(students.map(s => ({
           name: s.name, headline: s.headline,
           skills: s.skills, college: s.collage?.name,
           branch: s.branch, year: s.currentYear,
-        }));
+        })));
       } catch (err) {
         console.error("[search_students] ERROR:", err.message);
-        return [];
+        return JSON.stringify([]);
       }
     },
   });

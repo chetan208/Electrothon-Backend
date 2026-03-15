@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/complete-profile/:studentId",upload.single("avatar"), completeStudentProfile);
 
-router.get('/me', checkAuthMiddelware, getStudentDetails);
+router.get('/:id', getStudentDetails);
 
 router.get('/connect/:studentId', checkAuthMiddelware, connectWithStudent);
 
