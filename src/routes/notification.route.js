@@ -55,6 +55,43 @@ router.patch("/notifications/read/:notifId", async (req, res) => {
 });
 
 
+// PATCH — saari notifications read mark karo
+router.patch("/notifications/:userId/read-all", async (req, res) => {
+  try {
+    const { userId } = req.params;
+ 
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid userId" });
+    }
+ 
+    await Notification.updateMany(
+      { recipient: userId, isRead: false },
+      { isRead: true }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error("[notifications] read-all error:", err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE — single notification delete karo
+router.delete("/notifications/:notifId", async (req, res) => {
+  try {
+    const { notifId } = req.params;
+ 
+    if (!mongoose.Types.ObjectId.isValid(notifId)) {
+      return res.status(400).json({ success: false, message: "Invalid notifId" });
+    }
+ 
+    await Notification.findByIdAndDelete(notifId);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("[notifications] delete error:", err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 router.get("/trigger-daily-agent", async (req, res) => {
   runDailyOpportunityAgent();
   res.json({ success: true, message: "Agent started in background" });
