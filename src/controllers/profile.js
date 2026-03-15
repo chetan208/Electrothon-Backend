@@ -145,6 +145,45 @@ const getStudentDetails = async (req, res) => {
     }
 }
 
+const connectWithStudent = async (req, res) => {
+  const {studentId} = req.params; // ID of the student to connect with
+  const userId = req.student._id; // ID of the logged-in student
 
-export { completeStudentProfile, getStudentDetails };   
+  try {
+    const studentToConnect = await StudentModel.findById(studentId);
+    if(!studentToConnect) {
+      return res.status(404).json({
+        success: false,
+        message: "Student to connect with not found."
+      });
+    }
+    const currentStudent = await StudentModel.findById(userId);
+    if(!currentStudent) {
+      return res.status(404).json({
+        success: false,
+        message: "Current student not found."
+      });
+    }
+
+    currentStudent.connections.push(studentId);
+    await currentStudent.save();
+
+    res.status(200).json({
+        success: true,
+        message: `Successfully connected with ${studentToConnect.name}.`
+      });
+    
+  } catch (error) {
+      console.error('Error connecting with student:', error);
+      return res.status(500).json({
+          success: false,
+          message: 'An error occurred while connecting with the student.',
+          error: error.message
+      });
+    
+  }
+}
+
+
+export { completeStudentProfile, getStudentDetails, connectWithStudent };   
 

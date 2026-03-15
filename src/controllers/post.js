@@ -60,6 +60,18 @@ const addPost = async (req, res) => {
 
         await newPost.save();
 
+        const poster = await StudentModel.findById(studentId).select("name avatar connections");
+    if (poster?.connections?.length) {
+      notifyFriendPost({                        // await mat karo — background mein chalega
+        posterId:     studentId,
+        posterName:   poster.name,
+        posterAvatar: poster.avatar,
+        postId:       newPost._id,
+        postTitle:    newPost.title || newPost.content,
+        connections:  poster.connections,
+      }).catch(err => console.error("[notify] post notify error:", err));
+    }
+
         res.json({
             success: true,
             message: "Post added successfully",

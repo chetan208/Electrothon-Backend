@@ -11,11 +11,14 @@ import profileRoutes from './routes/profile.js';
 import aiRoutes from './routes/ai.js';
 import postRoutes from './routes/post.js';
 import chatRoute from "./routes/chat.route.js";
+import recommendationRoute from "./routes/recommendation.route.js";
+import { startScheduler } from "./cron/scheduler.js";
+import notificationRoute from "./routes/notification.route.js";
 
 
 // database connection
 mongoose.connect(process.env.MONGO_URI)
-.then(()=>console.log("mongoDB is connected"))
+.then(()=>(console.log("mongoDB is connected"), startScheduler()))
 .catch((err)=>console.log(err));
 
 const app = express();
@@ -43,6 +46,8 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/post', postRoutes);
 app.use("/api", chatRoute);
+app.use("/api/recommendations", recommendationRoute);
+app.use("/api", notificationRoute);
 
 
 

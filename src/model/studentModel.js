@@ -106,7 +106,14 @@ const studentSchema = new Schema({
   instagram: {
     type: String,
   },
-});
+  connections: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Student",
+    },
+  ],
+}, { timestamps: true });
+
 
 
 
